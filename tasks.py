@@ -10,10 +10,10 @@ import os
 from invoke import task
 import webbrowser
 
-PKG = "github.com/romnnn/github_actions_runner_launcher"
+PKG = "github.com/romnnn/github-actions-runner-launcher"
 CMD_PKG = PKG
 
-CMD_PKG = "github.com/romnnn/github_actions_runner_launcher/cmd/github_actions_runner_launcher"
+CMD_PKG = "github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher"
 
 
 ROOT_DIR = os.path.dirname(os.path.realpath(__file__))

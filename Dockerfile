@@ -9,7 +9,7 @@ COPY ./ /app
 
 # This removes debug information from the binary
 # Assumes go 1.10+
-RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -ldflags="-w -s" -o app "github.com/romnnn/github_actions_runner_launcher/cmd/github_actions_runner_launcher"
+RUN CGO_ENABLED=0 GOARCH=amd64 GOOS=linux go build -a -ldflags="-w -s" -o app "github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher"
 
 
 FROM gcr.io/distroless/static

@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/romnnn/github_actions_runner_launcher"
+	githubactionsrunnerlauncher "github.com/romnnn/github-actions-runner-launcher"
 )
 
 func run() string {
-	return github_actions_runner_launcher.Shout("This is an example")
+	return githubactionsrunnerlauncher.Shout("This is an example")
 }
 
 func main() {

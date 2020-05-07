@@ -6,7 +6,7 @@ import (
 
 	"github.com/romnnn/flags4urfavecli/flags"
 	"github.com/romnnn/flags4urfavecli/values"
-	"github.com/romnnn/github_actions_runner_launcher"
+	githubactionsrunnerlauncher "github.com/romnnn/github-actions-runner-launcher"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 )
@@ -19,13 +19,13 @@ const Version = "0.0.1"
 
 func serve(c *cli.Context) error {
 	greeting := fmt.Sprintf("Hi %s", c.String("name"))
-	log.Info(github_actions_runner_launcher.Shout(greeting))
+	log.Info(githubactionsrunnerlauncher.Shout(greeting))
 	return nil
 }
 
 func main() {
 	app := &cli.App{
-		Name:  "github_actions_runner_launcher",
+		Name:  "github-actions-runner-launcher",
 		Usage: "",
 		Flags: []cli.Flag{
 			&cli.GenericFlag{
@@ -44,7 +44,7 @@ func main() {
 				log.SetLevel(level)
 			}
 			log.Infof("Format is: %s", ctx.String("format"))
-			err := serve(c)
+			err := serve(ctx)
 			return err
 		},
 	}

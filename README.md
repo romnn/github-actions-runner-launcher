@@ -1,18 +1,18 @@
 ## github-actions-runner-launcher
 
 [![Build Status](https://travis-ci.com/romnnn/github_actions_runner_launcher.svg?branch=master)](https://travis-ci.com/romnnn/github_actions_runner_launcher)
-[![GitHub](https://img.shields.io/github/license/romnnn/github_actions_runner_launcher)](https://github.com/romnnn/github_actions_runner_launcher)
-[![GoDoc](https://godoc.org/github.com/romnnn/github_actions_runner_launcher?status.svg)](https://godoc.org/github.com/romnnn/github_actions_runner_launcher) [![Docker Pulls](https://img.shields.io/docker/pulls/romnn/github_actions_runner_launcher)](https://hub.docker.com/r/romnn/github_actions_runner_launcher) [![Test Coverage](https://codecov.io/gh/romnnn/github_actions_runner_launcher/branch/master/graph/badge.svg)](https://codecov.io/gh/romnnn/github_actions_runner_launcher)
-[![Release](https://img.shields.io/github/release/romnnn/github_actions_runner_launcher)](https://github.com/romnnn/github_actions_runner_launcher/releases/latest)
+[![GitHub](https://img.shields.io/github/license/romnnn/github_actions_runner_launcher)](https://github.com/romnnn/github-actions-runner-launcher)
+[![GoDoc](https://godoc.org/github.com/romnnn/github-actions-runner-launcher?status.svg)](https://godoc.org/github.com/romnnn/github-actions-runner-launcher) [![Docker Pulls](https://img.shields.io/docker/pulls/romnn/github_actions_runner_launcher)](https://hub.docker.com/r/romnn/github_actions_runner_launcher) [![Test Coverage](https://codecov.io/gh/romnnn/github_actions_runner_launcher/branch/master/graph/badge.svg)](https://codecov.io/gh/romnnn/github_actions_runner_launcher)
+[![Release](https://img.shields.io/github/release/romnnn/github_actions_runner_launcher)](https://github.com/romnnn/github-actions-runner-launcher/releases/latest)
 
 Your description goes here...
 
 ```bash
-go get github.com/romnnn/github_actions_runner_launcher/cmd/github_actions_runner_launcher
+go get github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher
 ```
 
 
-You can also download pre built binaries from the [releases page](https://github.com/romnnn/github_actions_runner_launcher/releases), or use the `docker` image:
+You can also download pre built binaries from the [releases page](https://github.com/romnnn/github-actions-runner-launcher/releases), or use the `docker` image:
 
 ```bash
 docker pull romnn/github_actions_runner_launcher
@@ -24,7 +24,7 @@ For a list of options, run with `--help`.
 #### Usage as a library
 
 ```golang
-import "github.com/romnnn/github_actions_runner_launcher"
+import "github.com/romnnn/github-actions-runner-launcher"
 ```
 
 For more examples, see `examples/`.

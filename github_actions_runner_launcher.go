@@ -1,4 +1,4 @@
-package github_actions_runner_launcher
+package githubactionsrunnerlauncher
 
 // Version is incremented using bump2version
 const Version = "0.0.1"

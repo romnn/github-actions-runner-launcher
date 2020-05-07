@@ -1,4 +1,4 @@
-module github.com/romnnn/github_actions_runner_launcher
+module github.com/romnnn/github-actions-runner-launcher
 
 go 1.14
 

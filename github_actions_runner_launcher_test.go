@@ -1,4 +1,4 @@
-package github_actions_runner_launcher
+package githubactionsrunnerlauncher
 
 import "testing"
 
