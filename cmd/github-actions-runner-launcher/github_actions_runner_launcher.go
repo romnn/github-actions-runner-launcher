@@ -17,9 +17,12 @@ var Rev = ""
 // Version is incremented using bump2version
 const Version = "0.0.1"
 
-func serve(c *cli.Context) error {
-	greeting := fmt.Sprintf("Hi %s", c.String("name"))
-	log.Info(githubactionsrunnerlauncher.Shout(greeting))
+func serve(cliCtx *cli.Context) error {
+	launcher, err := githubactionsrunnerlauncher.NewWithConfig(cliCtx.String("config"))
+	if err != nil {
+		return fmt.Errorf("Failed to create new launcher: %v", err)
+	}
+	launcher.Run()
 	return nil
 }
 
@@ -28,14 +31,25 @@ func main() {
 		Name:  "github-actions-runner-launcher",
 		Usage: "",
 		Flags: []cli.Flag{
+			&cli.PathFlag{
+				Name:    "config",
+				EnvVars: []string{"CONFIG"},
+				Usage:   "runner config file",
+			},
 			&cli.GenericFlag{
-				Name: "format",
+				Name: "runner-arch",
 				Value: &values.EnumValue{
-					Enum:    []string{"json", "xml", "csv"},
-					Default: "xml",
+					Enum:    []string{"x64", "arm", "arm64"},
+					Default: "x64",
 				},
-				EnvVars: []string{"FILEFORMAT"},
-				Usage:   "input file format",
+				EnvVars: []string{"RUNNER_ARCH"},
+				Usage:   "runner host architecture",
+			},
+			&cli.StringFlag{
+				Name:    "runner-version",
+				Value:   "2.169.1",
+				EnvVars: []string{"RUNNER_VERSION"},
+				Usage:   "runner version",
 			},
 			&flags.LogLevelFlag,
 		},
@@ -43,7 +57,6 @@ func main() {
 			if level, err := log.ParseLevel(ctx.String("log")); err == nil {
 				log.SetLevel(level)
 			}
-			log.Infof("Format is: %s", ctx.String("format"))
 			err := serve(ctx)
 			return err
 		},

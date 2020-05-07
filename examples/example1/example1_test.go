@@ -6,7 +6,7 @@ import (
 
 func TestCli(t *testing.T) {
 	out := run()
-	expected := "This is an example!"
+	expected := "t.b.a. Contributions are welcome :)"
 	if out != expected {
 		t.Errorf("Got %s but expected %s", out, expected)
 	}
