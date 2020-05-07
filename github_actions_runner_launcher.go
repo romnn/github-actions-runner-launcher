@@ -128,7 +128,6 @@ func (l *Launcher) startRunner(ctx context.Context, rLog *log.Entry, wg *sync.Wa
 		rLog.Error(err)
 		return
 	}
-	rLog.Errorf("Starting %s", runnerConfig.Environment.RunnerName)
 	cmd := exec.CommandContext(ctx, filepath.Join(workDir, "./run.sh"))
 	cmd.Dir = workDir
 
