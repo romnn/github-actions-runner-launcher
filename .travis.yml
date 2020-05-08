@@ -1,48 +1,48 @@
 dist: bionic
 language: go
 go:
-- 1.13.x
-- master
-- tip
+  - 1.13.x
+  - master
+  - tip
 os:
-- linux
-- osx
+  - linux
+  - osx
 env:
   - MOD=github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher
   - BINARY=github-actions-runner-launcher
 jobs:
   allow_failures:
-  - go: tip
+    - go: tip
   fast_finish: true
   include:
-  - stage: deploy
-    name: Publish release
-    os: linux
-    go: master
-    script:
-    - invoke cc
-    deploy:
-      provider: releases
-      token:
-        secure: QHyevTNA1YOMB8EPCo+tRpINQft4A22ts1wU/1beXLBPkBXkqgi+5+q3VPW+aj4zLSgIiOHtjqKGiGz715+DUha7PlrFkHUFyeGYsh300Hoh+7b2cdvbal5LycRhVyIQEGlh+9smHCyt7Su+uXQ+tP/Bfghk/mesGEImm6ynKTQ9eJm6GwDGSvSsgLtJVfpJzeJSOh1NZgxgXEmeEh0HjSdrViAPMb+zvWa58NHjlrQMCYHQ6NcZhT59oAo2qbZreFBT+W243aYLmTdX4mrBjqT4md4gmzXxSyqz93P2vasORAMAU3ili5DjZ2NEJfF0mjKklXUizHU+t8pwa2EW9BjNXsSCm+LyhaMSrlVvUaIa5M1ZxYXbSxXsVLwXzfIYSQ9Dbv/Jt11JXMgKxXUqeUBKtW+Yeg3qWsJrM6mpnshC39Rc+OUSH7kxqyyxhHviStb804+oj17eabVvAVrNnotvz21dtLNONdBBTF77PlZJ14aJXFrsAlWAMihtt0/u3H6xxbbTYQpbXZtu/kHmJ4SPBa7islExRM4AGw10/3wSavXIHStwH3viFOd2AoMYHu47nVH1AeuI/ab5jusWDb9mAM9WgZGt33fW94DN9MXcHOTGThYA0be3F61VLAwjzVVzy02cixUdGfIwBhHKH/WyUHE8F+HtmOrcz9pI0SM=
-      file_glob: true
-      file: build/*
-      skip_cleanup: true
-      on:
-        repo: romnnn/github_actions_runner_launcher
-        tags: true
+    - stage: deploy
+      name: Publish release
+      os: linux
+      go: master
+      script:
+        - invoke cc
+      deploy:
+        provider: releases
+        token:
+          secure: QHyevTNA1YOMB8EPCo+tRpINQft4A22ts1wU/1beXLBPkBXkqgi+5+q3VPW+aj4zLSgIiOHtjqKGiGz715+DUha7PlrFkHUFyeGYsh300Hoh+7b2cdvbal5LycRhVyIQEGlh+9smHCyt7Su+uXQ+tP/Bfghk/mesGEImm6ynKTQ9eJm6GwDGSvSsgLtJVfpJzeJSOh1NZgxgXEmeEh0HjSdrViAPMb+zvWa58NHjlrQMCYHQ6NcZhT59oAo2qbZreFBT+W243aYLmTdX4mrBjqT4md4gmzXxSyqz93P2vasORAMAU3ili5DjZ2NEJfF0mjKklXUizHU+t8pwa2EW9BjNXsSCm+LyhaMSrlVvUaIa5M1ZxYXbSxXsVLwXzfIYSQ9Dbv/Jt11JXMgKxXUqeUBKtW+Yeg3qWsJrM6mpnshC39Rc+OUSH7kxqyyxhHviStb804+oj17eabVvAVrNnotvz21dtLNONdBBTF77PlZJ14aJXFrsAlWAMihtt0/u3H6xxbbTYQpbXZtu/kHmJ4SPBa7islExRM4AGw10/3wSavXIHStwH3viFOd2AoMYHu47nVH1AeuI/ab5jusWDb9mAM9WgZGt33fW94DN9MXcHOTGThYA0be3F61VLAwjzVVzy02cixUdGfIwBhHKH/WyUHE8F+HtmOrcz9pI0SM=
+        file_glob: true
+        file: build/*
+        skip_cleanup: true
+        on:
+          repo: romnnn/github-actions-runner-launcher
+          tags: true
 install: true
 notifications:
   email: false
 before_script:
-- pip install -U pip && pip install pre-commit invoke ruamel.yaml
-- go get -u golang.org/x/lint/golint
-- go get github.com/fzipp/gocyclo
-- go get github.com/mitchellh/gox
+  - pip install -U pip && pip install pre-commit invoke ruamel.yaml
+  - go get -u golang.org/x/lint/golint
+  - go get github.com/fzipp/gocyclo
+  - go get github.com/mitchellh/gox
 script:
-- env GO111MODULE=on go build ${MOD}
-- invoke pre-commit
-- env GO111MODULE=on go test -v -race -coverprofile=coverage.txt -coverpkg=all -covermode=atomic
-  ./...
+  - env GO111MODULE=on go build ${MOD}
+  - invoke pre-commit
+  - env GO111MODULE=on go test -v -race -coverprofile=coverage.txt -coverpkg=all -covermode=atomic
+    ./...
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
