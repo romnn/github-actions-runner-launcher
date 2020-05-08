@@ -1,9 +1,9 @@
 ## github-actions-runner-launcher
 
-[![Build Status](https://travis-ci.com/romnnn/github_actions_runner_launcher.svg?branch=master)](https://travis-ci.com/romnnn/github_actions_runner_launcher)
-[![GitHub](https://img.shields.io/github/license/romnnn/github_actions_runner_launcher)](https://github.com/romnnn/github-actions-runner-launcher)
-[![GoDoc](https://godoc.org/github.com/romnnn/github-actions-runner-launcher?status.svg)](https://godoc.org/github.com/romnnn/github-actions-runner-launcher) [![Docker Pulls](https://img.shields.io/docker/pulls/romnn/github_actions_runner_launcher)](https://hub.docker.com/r/romnn/github_actions_runner_launcher) [![Test Coverage](https://codecov.io/gh/romnnn/github_actions_runner_launcher/branch/master/graph/badge.svg)](https://codecov.io/gh/romnnn/github_actions_runner_launcher)
-[![Release](https://img.shields.io/github/release/romnnn/github_actions_runner_launcher)](https://github.com/romnnn/github-actions-runner-launcher/releases/latest)
+[![Build Status](https://travis-ci.com/romnnn/github-actions-runner-launcher.svg?branch=master)](https://travis-ci.com/romnnn/github-actions-runner-launcher)
+[![GitHub](https://img.shields.io/github/license/romnnn/github-actions-runner-launcher)](https://github.com/romnnn/github-actions-runner-launcher)
+[![GoDoc](https://godoc.org/github.com/romnnn/github-actions-runner-launcher?status.svg)](https://godoc.org/github.com/romnnn/github-actions-runner-launcher) [![Docker Pulls](https://img.shields.io/docker/pulls/romnn/github-actions-runner-launcher)](https://hub.docker.com/r/romnn/github-actions-runner-launcher) [![Test Coverage](https://codecov.io/gh/romnnn/github-actions-runner-launcher/branch/master/graph/badge.svg)](https://codecov.io/gh/romnnn/github-actions-runner-launcher)
+[![Release](https://img.shields.io/github/release/romnnn/github-actions-runner-launcher)](https://github.com/romnnn/github-actions-runner-launcher/releases/latest)
 
 Automatic setup and registration of GitHub actions runner instances. If you have tried [github.com/myoung34/docker-github-actions-runner](https://github.com/myoung34/docker-github-actions-runner) or similiar options for running the action runners as docker containers for the convenience, but want to run them on bare-metal, this is just right for you!
 
