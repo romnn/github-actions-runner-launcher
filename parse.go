@@ -54,7 +54,11 @@ func (l *Launcher) prepareRunnerFiles(rLog *log.Entry, runner RunnerConfig) erro
 
 		// Install deps
 		rLog.Info("Installing dependencies")
-		if err := exec.Command(filepath.Join(workDir, "./bin/installdependencies.sh")).Run(); err != nil {
+		cmd = exec.Command(filepath.Join(workDir, "./bin/installdependencies.sh"))
+		cmd.Path = workDir
+		if out, err := cmd.CombinedOutput(); err != nil {
+			rLog.Error(cmd.String())
+			rLog.Error(string(out))
 			return fmt.Errorf("Failed to install runner dependencies: %v", err)
 		}
 	}
