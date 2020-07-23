@@ -45,21 +45,29 @@ func (l *Launcher) prepareRunnerFiles(rLog *log.Entry, runner RunnerConfig) erro
 
 		// Untar the archive
 		rLog.Infof("Extracting %s", runnerArchive)
-		cmd := exec.Command("tar", "-zxf", runnerArchive, "-C", workDir)
-		err = cmd.Start()
-		err = cmd.Wait()
+		tarCmd := exec.Command("tar", "-zxf", runnerArchive, "-C", workDir)
+		err = tarCmd.Start()
+		err = tarCmd.Wait()
 		if err != nil {
 			return fmt.Errorf("Failed to untar runner archive: %v", err)
 		}
 
 		// Install deps
-		rLog.Info("Installing dependencies")
-		cmd = exec.Command(filepath.Join(workDir, "./bin/installdependencies.sh"))
-		cmd.Path = workDir
-		if out, err := cmd.CombinedOutput(); err != nil {
-			rLog.Error(cmd.String())
-			rLog.Error(string(out))
-			return fmt.Errorf("Failed to install runner dependencies: %v", err)
+		if false {
+			// Only one runner can install at the same time
+			l.aptMux.Lock()
+			rLog.Info("Installing dependencies")
+			cmdScript := filepath.Join(workDir, "bin/installdependencies.sh")
+			rLog.Info(cmdScript)
+			depCmd := exec.Command(cmdScript)
+			// depCmd.Dir = workDir
+			if out, err := depCmd.CombinedOutput(); err != nil {
+				rLog.Warning(cmdScript)
+				rLog.Warning(string(out))
+				rLog.Warningf("Failed to install runner dependencies: %v", err)
+				// return fmt.Errorf("Failed to install runner dependencies: %v", err)
+			}
+			l.aptMux.Unlock()
 		}
 	}
 	return nil

@@ -52,8 +52,10 @@ type Launcher struct {
 	RunnerVersion    string
 	RunnerArch       string
 	ForceReconfigure bool
+	ForceRemoveExisting bool
 	configPath       string
 	apiClient        *github.Client
+	aptMux 			 sync.Mutex
 }
 
 // NewWithConfig ...
@@ -69,7 +71,7 @@ func NewWithConfig(file string) (*Launcher, error) {
 }
 
 // Run ...
-func (l *Launcher) Run() (err error) {
+func (l *Launcher) Run(run bool) (err error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -108,15 +110,24 @@ func (l *Launcher) Run() (err error) {
 			rLog.Infof("Obtained RUNNER_TOKEN=%s (expires on %v)", runnerToken, expireTime)
 		}
 
-		go l.startRunner(ctx, rLog, &wg, runnerConfig, runnerToken)
+		go func(rConf RunnerConfig, rToken string) {
+			wg.Add(1)
+			if err := l.configureRunner(rLog, rConf, rToken); err != nil {
+				rLog.Error(err)
+			}
+			if run {
+				l.startRunner(ctx, rLog, &wg, rConf, rToken)
+			}
+			wg.Done()
+		}(runnerConfig, runnerToken) 
 	}
 	wg.Wait()
 	return nil
 }
 
 func (l *Launcher) startRunner(ctx context.Context, rLog *log.Entry, wg *sync.WaitGroup, runnerConfig RunnerConfig, runnerToken string) {
-	wg.Add(1)
-	defer wg.Done()
+	// wg.Add(1)
+	// defer wg.Done()
 
 	workDir, err := l.GetWorkDirForRunner(runnerConfig)
 	if err != nil {
@@ -173,9 +184,6 @@ func (l *Launcher) configureRunner(rLog *log.Entry, runner RunnerConfig, runnerT
 	if err := l.prepareRunnerFiles(rLog, runner); err != nil {
 		return fmt.Errorf("Failed to prepare runner: %v", err)
 	}
-	// TODO: If one might want to remove runners in the future
-	// This requires a remove token from the GitHub API
-	// _ = exec.Command(filepath.Join(workDir, "./config.sh", "remove")).Run()
 	cmd := exec.Command(filepath.Join(workDir, "./config.sh"), "--url", runner.Environment.RepoURL, "--token", runnerToken, "--name", runner.Environment.RunnerName, "--work", workDir, "--labels", runner.Environment.Labels, "--unattended", "--replace")
 	cmd.Dir = workDir
 	if out, err := cmd.CombinedOutput(); l.ForceReconfigure && err != nil {
@@ -214,10 +222,28 @@ func (l *Launcher) ObtainRunnerToken(ctx context.Context, runner RunnerConfig, a
 		return "", nil, fmt.Errorf("Failed to extract github account and repo name from \"%s\"", runner.Environment.RepoURL)
 	}
 	acc, repo := matches[1], matches[2]
+	log.Debugf("acc=%s, repo=%s", acc, repo)
 	if acc == "" || repo == "" {
 		return "", nil, fmt.Errorf("Failed to extract github account and repo name from \"%s\" (acc=%s, repo=%s)", runner.Environment.RepoURL, acc, repo)
 	}
+
+	runners, _, err := l.apiClient.Actions.ListRunners(ctx, acc, repo, &github.ListOptions{
+		Page: 0,
+		PerPage: 100,
+	})
+	if err != nil {
+		log.Warnf("Failed to check for any existing runners: %v", err)
+	} else if l.ForceRemoveExisting {
+		log.Infof("%d existing runners will be removed", runners.TotalCount)
+		for _, runner := range runners.Runners {
+			log.Infof("Removing runner %s (%d) [os=%s, status=%s]", runner.GetName(), runner.GetID(), runner.GetOS(), runner.GetStatus())
+			if _, err := l.apiClient.Actions.RemoveRunner(ctx, acc, repo, runner.GetID()); err != nil {
+				log.Warnf("Failed to remove runner %d: %v", runner.GetID(), err)
+			}
+		}
+	}
 	token, response, err := l.apiClient.Actions.CreateRegistrationToken(ctx, acc, repo)
+	log.Debugf("runner_token=%v", token)
 	if err != nil || token.Token == nil {
 		return "", nil, fmt.Errorf("Failed to obtain runner token from the GitHub API: %v", err)
 	}
