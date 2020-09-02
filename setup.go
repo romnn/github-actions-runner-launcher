@@ -1,11 +1,11 @@
 package githubactionsrunnerlauncher
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"os/exec"
 	"path/filepath"
-	"errors"
-	"context"
 
 	"github.com/google/go-github/v31/github"
 	log "github.com/sirupsen/logrus"
