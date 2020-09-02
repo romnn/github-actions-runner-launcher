@@ -103,6 +103,10 @@ def cc(c):
         'gox -os="linux darwin windows" -arch="amd64" -output="build/%s" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose %s'
         % (output, CMD_PKG)
     )
+    c.run(
+        'gox -os="linux" -arch="arm" -output="build/%s" -ldflags "-X main.Rev=`git rev-parse --short HEAD`" -verbose %s'
+        % (output, CMD_PKG)
+    )
 
 
 
