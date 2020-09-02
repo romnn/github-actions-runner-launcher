@@ -19,7 +19,8 @@ const Version = "0.1.1"
 
 func serve(cliCtx *cli.Context, run bool) error {
 	launcher, err := githubactionsrunnerlauncher.NewWithConfig(cliCtx.String("config"))
-	launcher.ForceRemoveExisting = cliCtx.Bool("force-remove")
+	launcher.RemoveExisting = cliCtx.Bool("remove")
+	launcher.Reconfigure = cliCtx.Bool("reconfigure")
 	if err != nil {
 		return fmt.Errorf("Failed to create new launcher: %v", err)
 	}
@@ -35,7 +36,7 @@ func main() {
 				Name:    "install",
 				Aliases: []string{"i"},
 				Usage:   "install and prepare the runners",
-				Action:  func(ctx *cli.Context) error {
+				Action: func(ctx *cli.Context) error {
 					if level, err := log.ParseLevel(ctx.String("log")); err == nil {
 						log.SetLevel(level)
 					}
@@ -47,7 +48,7 @@ func main() {
 				Name:    "run",
 				Aliases: []string{"r"},
 				Usage:   "start the runners",
-				Action:  func(ctx *cli.Context) error {
+				Action: func(ctx *cli.Context) error {
 					if level, err := log.ParseLevel(ctx.String("log")); err == nil {
 						log.SetLevel(level)
 					}
@@ -73,15 +74,21 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:    "runner-version",
-				Value:   "2.267.1",
+				Value:   "2.273.0",
 				EnvVars: []string{"RUNNER_VERSION"},
 				Usage:   "runner version",
 			},
 			&cli.BoolFlag{
-				Name:    "force-remove",
+				Name:    "remove",
 				Value:   false,
-				EnvVars: []string{"FORCE_REMOVE"},
+				EnvVars: []string{"REMOVE"},
 				Usage:   "remove any existing runners",
+			},
+			&cli.BoolFlag{
+				Name:    "reconfigure",
+				Value:   false,
+				EnvVars: []string{"RECONFIGURE"},
+				Usage:   "reconfigure the runners",
 			},
 			&flags.LogLevelFlag,
 		},
