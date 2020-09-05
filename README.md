@@ -32,10 +32,10 @@ services:
 
 You can then start with
 ```bash
-go get github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher
+go get -u github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher
 # To install the runners dependencies, the first run needs sudo privileges
-sudo github-actions-runner-launcher install --config sample.yml
-github-actions-runner-launcher run --config sample.yml
+sudo github-actions-runner-launcher --config sample.yml install
+github-actions-runner-launcher --config sample.yml run
 ```
 
 You can also download pre built binaries from the [releases page](https://github.com/romnnn/github-actions-runner-launcher/releases), or use the `docker` image:
