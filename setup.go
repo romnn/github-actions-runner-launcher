@@ -1,7 +1,6 @@
 package githubactionsrunnerlauncher
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"os/exec"
@@ -10,23 +9,6 @@ import (
 	"github.com/google/go-github/v31/github"
 	log "github.com/sirupsen/logrus"
 )
-
-func (l *Launcher) deprecatedRemove(ctx context.Context, acc, repo string) {
-	runners, _, err := l.apiClient.Actions.ListRunners(ctx, acc, repo, &github.ListOptions{
-		Page:    0,
-		PerPage: 100,
-	})
-	if err != nil {
-		log.Warnf("Failed to check for any existing runners: %v", err)
-	}
-	log.Infof("%d registered runners will be removed", runners.TotalCount)
-	for _, runner := range runners.Runners {
-		log.Infof("Removing runner %s (%d) [os=%s, status=%s]", runner.GetName(), runner.GetID(), runner.GetOS(), runner.GetStatus())
-		if _, err := l.apiClient.Actions.RemoveRunner(ctx, acc, repo, runner.GetID()); err != nil {
-			log.Warnf("Failed to remove runner %d: %v", runner.GetID(), err)
-		}
-	}
-}
 
 // RemoveRunner ....
 func (l *Launcher) RemoveRunner(runner RunnerConfig, removeToken *github.RemoveToken) error {
