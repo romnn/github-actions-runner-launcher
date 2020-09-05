@@ -18,7 +18,7 @@ import (
 )
 
 // Version is incremented using bump2version
-const Version = "0.1.2"
+const Version = "0.1.3"
 
 // Launcher ...
 type Launcher struct {

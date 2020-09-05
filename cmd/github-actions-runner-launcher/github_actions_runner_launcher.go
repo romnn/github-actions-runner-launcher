@@ -15,7 +15,7 @@ import (
 var Rev = ""
 
 // Version is incremented using bump2version
-const Version = "0.1.2"
+const Version = "0.1.3"
 
 func serve(cliCtx *cli.Context, run bool) error {
 	launcher, err := githubactionsrunnerlauncher.NewWithConfig(cliCtx.String("config"))
