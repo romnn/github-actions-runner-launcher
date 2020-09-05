@@ -15,21 +15,48 @@ import (
 var Rev = ""
 
 // Version is incremented using bump2version
-const Version = "0.1.1"
+const Version = "0.1.2"
 
-func serve(cliCtx *cli.Context) error {
+func serve(cliCtx *cli.Context, run bool) error {
 	launcher, err := githubactionsrunnerlauncher.NewWithConfig(cliCtx.String("config"))
+	launcher.RemoveExisting = cliCtx.Bool("remove")
+	launcher.Reconfigure = cliCtx.Bool("reconfigure")
 	if err != nil {
 		return fmt.Errorf("Failed to create new launcher: %v", err)
 	}
-	launcher.Run()
-	return nil
+	return launcher.Run(run)
 }
 
 func main() {
 	app := &cli.App{
 		Name:  "github-actions-runner-launcher",
 		Usage: "",
+		Commands: []*cli.Command{
+			{
+				Name:    "install",
+				Aliases: []string{"i"},
+				Usage:   "install and prepare the runners",
+				Action: func(ctx *cli.Context) error {
+					if level, err := log.ParseLevel(ctx.String("log")); err == nil {
+						log.SetLevel(level)
+					}
+					err := serve(ctx, false)
+					return err
+				},
+			},
+			{
+				Name:    "run",
+				Aliases: []string{"r"},
+				Usage:   "start the runners",
+				Action: func(ctx *cli.Context) error {
+					if level, err := log.ParseLevel(ctx.String("log")); err == nil {
+						log.SetLevel(level)
+					}
+					err := serve(ctx, true)
+					return err
+				},
+			},
+		},
 		Flags: []cli.Flag{
 			&cli.PathFlag{
 				Name:    "config",
@@ -47,18 +74,23 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:    "runner-version",
-				Value:   "2.169.1",
+				Value:   "2.273.0",
 				EnvVars: []string{"RUNNER_VERSION"},
 				Usage:   "runner version",
 			},
+			&cli.BoolFlag{
+				Name:    "remove",
+				Value:   false,
+				EnvVars: []string{"REMOVE"},
+				Usage:   "remove any existing runners",
+			},
+			&cli.BoolFlag{
+				Name:    "reconfigure",
+				Value:   false,
+				EnvVars: []string{"RECONFIGURE"},
+				Usage:   "reconfigure the runners",
+			},
 			&flags.LogLevelFlag,
-		},
-		Action: func(ctx *cli.Context) error {
-			if level, err := log.ParseLevel(ctx.String("log")); err == nil {
-				log.SetLevel(level)
-			}
-			err := serve(ctx)
-			return err
 		},
 	}
 	err := app.Run(os.Args)

@@ -14,10 +14,10 @@ version: '3.3'
 services:
   my-runner:
     environment:
-      REPO_URL: https://github.com/my/repo
-      # Use access token to automatically obtain runner tokens from the github API
+      REPO_URL: https://github.com/my-org/repo
+      # Use access token to automatically obtain runner tokens from the github API (see 1.)
       ACCESS_TOKEN: <MY-SECRET-GITHUB-ACCESS-TOKEN>
-      # The runner token must be specified otherwise
+      # The runner token must be specified otherwise (see 2.)
       RUNNER_TOKEN: <MY-SECRET-RUNNER-TOKEN>
       RUNNER_NAME: my-runner
       RUNNER_WORKDIR: /my/runners/work/dir
@@ -26,9 +26,16 @@ services:
       LABELS: linux,x64
 ```
 
+**Important notes**: 
+1. Youy can obtain an access token to automatically create `RUNNER_TOKEN`s for you with the GitHub API. You can create a token at [https://github.com/settings/tokens](https://github.com/settings/tokens). When you want the runners to work with public repos only, choose the `public_repo` scope, otherwise choose the `repo` scope. Always remember to keep the token and your runner config private!
+2. You can get a new `RUNNER_TOKEN` at [https://github.com/organizations/my-org/settings/actions/add-new-runner](https://github.com/organizations/my-org/settings/actions/add-new-runner). Note that you only have to copy the token used for `./config.sh`.
+
 You can then start with
 ```bash
-go get github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher --config sample.yml
+go get -u github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher
+# To install the runners dependencies, the first run needs sudo privileges
+sudo github-actions-runner-launcher --config sample.yml install
+github-actions-runner-launcher --config sample.yml run
 ```
 
 You can also download pre built binaries from the [releases page](https://github.com/romnnn/github-actions-runner-launcher/releases), or use the `docker` image:
@@ -39,15 +46,9 @@ docker pull romnn/github-actions-runner-launcher
 
 For a list of options, run with `--help`.
 
+#### Troubleshooting
 
-#### Usage as a library
-
-```golang
-import "github.com/romnnn/github-actions-runner-launcher"
-```
-
-For more examples, see `examples/`.
-
+- `Failed to prepare runner: Failed to install runner dependencies: fork/exec` usually indicates that you should run the script as a binary instead of with `go run`.
 
 #### Development
 
