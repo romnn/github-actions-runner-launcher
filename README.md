@@ -32,7 +32,7 @@ services:
 
 You can then start with
 ```bash
-go get -u github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher
+GO111MODULE=on go get -u github.com/romnnn/github-actions-runner-launcher/cmd/github-actions-runner-launcher
 # To install the runners dependencies, the first run needs sudo privileges
 sudo github-actions-runner-launcher --config sample.yml install
 github-actions-runner-launcher --config sample.yml run
